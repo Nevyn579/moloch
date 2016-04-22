@@ -26,8 +26,8 @@ if [ "$#" -gt 0 ]; then
 fi
 
 
-ES=1.7.3
-NODEJS=0.10.43
+ES=2.3.1
+NODEJS=0.10.38
 INSTALL_DIR=$PWD
 
 if [ "$(id -u)" != "0" ]; then
@@ -155,10 +155,10 @@ if [ ! -f "elasticsearch-${ES}.tar.gz" ]; then
 fi
 
 cd ${TDIR}
-tar xfz ${INSTALL_DIR}/thirdparty/elasticsearch-${ES}.tar.gz
+tar xvfz ${INSTALL_DIR}/thirdparty/elasticsearch-${ES}.tar.gz
 cd elasticsearch-${ES}
-./bin/plugin -install mobz/elasticsearch-head
-./bin/plugin -install lukas-vlcek/bigdesk
+./bin/plugin install mobz/elasticsearch-head
+./bin/plugin install jayant2014/bigdesk #changed to working bigdesk plugin
 
 
 #make
@@ -233,7 +233,7 @@ if [ -z $ESMEM ]; then ESMEM="512M"; fi
 
 echo "MOLOCH: Copying single-host config files"
 cp ${INSTALL_DIR}/single-host/etc/* ${TDIR}/etc
-cat ${INSTALL_DIR}/single-host/etc/elasticsearch.yml | sed -e "s,_TDIR_,${TDIR},g" > ${TDIR}/etc/elasticsearch.yml
+cat ${INSTALL_DIR}/single-host/etc/elasticsearch.yml | sed -e "s,_TDIR_,${TDIR},g" > ${TDIR}/elasticsearch-${ES}/config/elasticsearch.yml
 
 cat ${INSTALL_DIR}/single-host/bin/run_es.sh | sed -e "s,_TDIR_,${TDIR},g" -e "s/_ES_/${ES}/g" -e "s/_ESMEM_/${ESMEM}/g" > ${TDIR}/bin/run_es.sh
 cat ${INSTALL_DIR}/single-host/bin/run_capture.sh | sed -e "s,_TDIR_,${TDIR},g" > ${TDIR}/bin/run_capture.sh
